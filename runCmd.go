@@ -232,8 +232,7 @@ func connect(str string) (client *ssh.Client, e error) {
 				}
 			}
 		}
-	}
-	if cfg.AuthMethod == "sshkey" || cfg.AuthMethod == "smart" {
+	} else if cfg.AuthMethod == "sshkey" || cfg.AuthMethod == "smart" {
 		for _, privateKeyMap := range cfg.PrivateKeys {
 			for username, privateKey := range privateKeyMap {
 				if cfg.Debug {
@@ -266,6 +265,9 @@ func connect(str string) (client *ssh.Client, e error) {
 				}
 			}
 		}
+
+	} else {
+		e = errors.New(cfg.AuthMethod + " is error")
 	}
 	return
 }
