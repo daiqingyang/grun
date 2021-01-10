@@ -21,6 +21,7 @@ var (
 		ColorPrint: true,
 		AddNewline: true,
 		BackOnCopy: true,
+		AuthMethod: "smart",
 	}
 	cmd        string
 	wg         sync.WaitGroup
@@ -46,6 +47,8 @@ type config struct {
 	Become        bool
 	ColorPrint    bool
 	BackOnCopy    bool
+	PrivateKeys   []map[string]string
+	AuthMethod    string
 }
 
 func init() {

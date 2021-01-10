@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path"
 	"strconv"
@@ -204,26 +205,68 @@ func connect(str string) (client *ssh.Client, e error) {
 	userPasswords := cfg.UserPasswords
 	port := cfg.Sshport
 	addr := str + ":" + strconv.Itoa(port)
-	for _, userPasswordsMap := range userPasswords {
-		for username, password := range userPasswordsMap {
-			fmt.Println(username, password)
-			cConfig := &ssh.ClientConfig{
-				User: username,
-				Auth: []ssh.AuthMethod{
-					ssh.Password(password),
-				},
-				HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-				Timeout:         time.Second * 2,
-			}
-			client, e = ssh.Dial("tcp", addr, cConfig)
-			if e != nil {
-				continue
-			} else {
-				break
+	var content []byte
+	var signer ssh.Signer
+	if cfg.AuthMethod == "password" || cfg.AuthMethod == "smart" {
+		for _, userPasswordsMap := range userPasswords {
+			for username, password := range userPasswordsMap {
+				if cfg.Debug {
+					fmt.Println("ssh auth try use:", username, password)
+				}
+				cConfig := &ssh.ClientConfig{
+					User: username,
+					Auth: []ssh.AuthMethod{
+						ssh.Password(password),
+					},
+					HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+					Timeout:         time.Second * 2,
+				}
+				client, e = ssh.Dial("tcp", addr, cConfig)
+				if e != nil {
+					if cfg.Debug {
+						logger.Println(e)
+					}
+					continue
+				} else {
+					return
+				}
 			}
 		}
 	}
-
+	if cfg.AuthMethod == "sshkey" || cfg.AuthMethod == "smart" {
+		for _, privateKeyMap := range cfg.PrivateKeys {
+			for username, privateKey := range privateKeyMap {
+				if cfg.Debug {
+					fmt.Println("ssh auth try use:", username, privateKey)
+				}
+				content, e = ioutil.ReadFile(privateKey)
+				if e != nil {
+					if cfg.Debug {
+						logger.Println(e)
+					}
+					continue
+				}
+				signer, e = ssh.ParsePrivateKey(content)
+				cConfig := &ssh.ClientConfig{
+					User: username,
+					Auth: []ssh.AuthMethod{
+						ssh.PublicKeys(signer),
+					},
+					HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+					Timeout:         time.Second * 2,
+				}
+				client, e = ssh.Dial("tcp", addr, cConfig)
+				if e != nil {
+					if cfg.Debug {
+						logger.Println(e)
+					}
+					continue
+				} else {
+					return
+				}
+			}
+		}
+	}
 	return
 }
 

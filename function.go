@@ -86,8 +86,18 @@ cache=true
 sshPort=22
 become=false
 backOnCopy=true
-[userPasswords]
+authMethod=smart
+#authMethod=password
+#authMethod=sshkey
+[[privateKeys]]
+root="$HOME/.ssh/id_rsa"
+[[privateKeys]]
+otherUser="$HOME/.ssh/id_rsa2"
+[[userPasswords]]
 root="123456"
+[[userPasswords]]
+oatherUser="654321"
+
 `
 		home := "."
 		if u, e := user.Current(); e != nil {
