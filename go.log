@@ -1,0 +1,65 @@
+2021/01/09 20:12:11 runCmd.go:50: 10.58.1165.167 is not ip
+2021/01/09 20:12:23 runCmd.go:119: 10.58.165.167 run error: ssh: Stdout already set
+2021/01/09 20:13:25 runCmd.go:119: 10.58.165.167 run error: ssh: Stdout already set
+2021/01/09 20:16:31 runCmd.go:121: 10.58.165.167 run error: ssh: session already started
+2021/01/09 20:40:43 main.go:88: open local file: open pwd: no such file or directory
+2021/01/09 20:40:43 runCmd.go:98: open pwd: no such file or directory
+2021/01/09 20:46:31 runCmd.go:163: open local file: open pwd: no such file or directory
+2021/01/09 20:47:37 runCmd.go:163: open local file: open pwd: no such file or directory
+2021/01/09 20:48:38 runCmd.go:163: open pwd: no such file or directory
+2021/01/09 21:26:54 runCmd.go:122: 10.58.165.167 run error: Process exited with status 2
+2021/01/09 21:28:34 runCmd.go:122: 10.58.165.167 run error: Process exited with status 2
+2021/01/09 21:29:15 runCmd.go:122: 10.58.165.167  Process exited with status 2
+2021/01/09 21:29:58 runCmd.go:123: 10.58.165.167: Process exited with status 2
+2021/01/09 21:31:18 runCmd.go:123: 10.58.165.167: Process exited with status 2
+2021/01/09 21:33:51 runCmd.go:123: 10.58.165.167: Process exited with status 2
+2021/01/09 21:33:51 runCmd.go:80: p
+2021/01/09 21:34:47 runCmd.go:123: 10.58.165.167: Process exited with status 2
+2021/01/09 21:47:16 runCmd.go:194: 10.58.165.167:22 create dest file: sftp: "Failure" (SSH_FX_FAILURE)
+2021/01/09 21:49:39 runCmd.go:190: open test.shs: no such file or directory
+2021/01/09 21:50:04 runCmd.go:190: open test.shs: no such file or directory
+2021/01/09 21:50:08 runCmd.go:197: 10.58.165.167:22 create dest file: sftp: "Failure" (SSH_FX_FAILURE)
+2021/01/09 21:55:50 runCmd.go:198: &{tmp 24576 2148532735 {0 63745796975 0xe2b1c0} 0xc00030c7c0}
+2021/01/09 21:55:50 runCmd.go:202: 10.58.165.167:22 create dest file: sftp: "Failure" (SSH_FX_FAILURE)
+2021/01/09 21:56:48 runCmd.go:198: true
+2021/01/09 21:56:48 runCmd.go:202: 10.58.165.167:22 create dest file: sftp: "Failure" (SSH_FX_FAILURE)
+2021/01/09 21:57:10 runCmd.go:196: file does not exist
+2021/01/09 21:57:10 runCmd.go:202: 10.58.165.167:22 create dest file: sftp: "Permission denied" (SSH_FX_PERMISSION_DENIED)
+2021/01/09 21:58:00 runCmd.go:204: 10.58.165.167:22 create dest file: sftp: "Permission denied" (SSH_FX_PERMISSION_DENIED)
+2021/01/09 22:36:41 runCmd.go:237: 10.58.165.167:22 create dest file: sftp: "Permission denied" (SSH_FX_PERMISSION_DENIED)
+2021/01/09 22:49:02 runCmd.go:237: 10.58.165.167 create dest file: sftp: "Permission denied" (SSH_FX_PERMISSION_DENIED)
+2021/01/09 22:50:29 runCmd.go:237: 10.58.165.167 create dest file: sftp: "Permission denied" (SSH_FX_PERMISSION_DENIED)
+2021/01/09 23:16:12 runCmd.go:247: 10.58.165.167 create dest file: sftp: "Permission denied" (SSH_FX_PERMISSION_DENIED)
+2021/01/09 23:19:25 runCmd.go:249: 10.58.165.167 create dest file: sftp: "Permission denied" (SSH_FX_PERMISSION_DENIED)
+2021/01/09 23:28:01 runCmd.go:177: dial tcp 10.58.165.165:22: i/o timeout
+2021/01/09 23:28:21 runCmd.go:177: dial tcp 10.58.165.165:22: i/o timeout
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
+2021/01/09 23:29:27 runCmd.go:177: ssh: handshake failed: ssh: unable to authenticate, attempted methods [none password], no supported methods remain
