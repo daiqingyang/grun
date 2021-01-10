@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"sync"
 	"time"
 
@@ -63,7 +62,6 @@ func init() {
 }
 
 func main() {
-	os.Exit(1)
 	// index := readCache("b.a.a.a")
 	// fmt.Println(index)
 	// writeCache("b.a.a.a", 20000)
