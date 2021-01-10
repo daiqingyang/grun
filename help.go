@@ -15,7 +15,7 @@ func getCmdLineArg() {
 	}
 
 	forks := flag.Int("f", defaultForks, "set concurrent num")
-	debug := flag.Bool("d", false, "open debug mode")
+	debug := flag.Bool("v", false, "open debug mode")
 	notColorPrint := flag.Bool("nc", false, "close color print")
 	notBackOnCopy := flag.Bool("nb", false, "close backup when copy")
 	authMethod := flag.String("m", "", "ssh connect auth method [password|sshkey|smart],default is smart")
