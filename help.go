@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"time"
 )
 
 func getCmdLineArg() {
@@ -17,7 +18,8 @@ func getCmdLineArg() {
 	debug := flag.Bool("d", false, "open debug mode")
 	notColorPrint := flag.Bool("nc", false, "close color print")
 	notBackOnCopy := flag.Bool("nb", false, "close backup when copy")
-
+	authMethod := flag.String("m", "", "ssh connect auth method [password|sshkey|smart],default is smart")
+	timeOut := flag.Float64("t", cfg.TimeOut.Seconds(), "set ssh connect time out, unit is second")
 	become := flag.Bool("b", false, "if run cmd as root")
 	remoteRun := flag.Bool("r", false, "copy script file to remote and run")
 	noNewline := flag.Bool("n", false, "print result without new line between ip and result")
@@ -26,11 +28,12 @@ func getCmdLineArg() {
 	client = flag.Bool("client", false, "open client mod")
 	flag.Parse()
 	other := flag.Args()
-
+	timeOutInt := int(*timeOut)
 	if len(other) != 0 {
 		cmd = other[0]
 	}
 	cfg.Forks = *forks
+	cfg.TimeOut = time.Second * time.Duration(timeOutInt)
 	if *remoteRun != false {
 		cfg.RemoteRun = *remoteRun
 	}
@@ -51,6 +54,9 @@ func getCmdLineArg() {
 	}
 	if *notBackOnCopy != false {
 		cfg.BackOnCopy = false
+	}
+	if *authMethod != "" {
+		cfg.AuthMethod = *authMethod
 	}
 	if cfg.Debug {
 		fmt.Printf("[debug]%+v", cfg)

@@ -86,9 +86,9 @@ cache=true
 sshPort=22
 become=false
 backOnCopy=true
-authMethod=smart
-#authMethod=password
-#authMethod=sshkey
+authMethod="smart"
+#authMethod="password"
+#authMethod="sshkey"
 [[privateKeys]]
 root="$HOME/.ssh/id_rsa"
 [[privateKeys]]

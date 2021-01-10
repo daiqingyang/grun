@@ -219,7 +219,7 @@ func connect(str string) (client *ssh.Client, e error) {
 						ssh.Password(password),
 					},
 					HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-					Timeout:         time.Second * 2,
+					Timeout:         cfg.TimeOut,
 				}
 				client, e = ssh.Dial("tcp", addr, cConfig)
 				if e != nil {
@@ -253,7 +253,7 @@ func connect(str string) (client *ssh.Client, e error) {
 						ssh.PublicKeys(signer),
 					},
 					HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-					Timeout:         time.Second * 2,
+					Timeout:         cfg.TimeOut,
 				}
 				client, e = ssh.Dial("tcp", addr, cConfig)
 				if e != nil {

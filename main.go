@@ -2,7 +2,9 @@ package main
 
 import (
 	"log"
+	"os"
 	"sync"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,6 +24,7 @@ var (
 		AddNewline: true,
 		BackOnCopy: true,
 		AuthMethod: "smart",
+		TimeOut:    time.Second * 2,
 	}
 	cmd        string
 	wg         sync.WaitGroup
@@ -49,6 +52,7 @@ type config struct {
 	BackOnCopy    bool
 	PrivateKeys   []map[string]string
 	AuthMethod    string
+	TimeOut       time.Duration
 }
 
 func init() {
@@ -59,7 +63,7 @@ func init() {
 }
 
 func main() {
-
+	os.Exit(1)
 	// index := readCache("b.a.a.a")
 	// fmt.Println(index)
 	// writeCache("b.a.a.a", 20000)
