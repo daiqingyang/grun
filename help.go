@@ -59,6 +59,6 @@ func getCmdLineArg() {
 		cfg.AuthMethod = *authMethod
 	}
 	if cfg.Debug {
-		fmt.Printf("[debug]%+v", cfg)
+		fmt.Printf("[debug]%+v\n", cfg)
 	}
 }
