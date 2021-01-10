@@ -39,7 +39,7 @@ type config struct {
 	AddNewline    bool
 	RemoteRun     bool
 	Copy          bool
-	UserPasswords map[string]string
+	UserPasswords []map[string]string
 	Cache         bool
 	CacheFile     string
 	Sshport       int
