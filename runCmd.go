@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"path"
@@ -203,20 +204,23 @@ func connect(str string) (client *ssh.Client, e error) {
 	userPasswords := cfg.UserPasswords
 	port := cfg.Sshport
 	addr := str + ":" + strconv.Itoa(port)
-	for username, password := range userPasswords {
-		cConfig := &ssh.ClientConfig{
-			User: username,
-			Auth: []ssh.AuthMethod{
-				ssh.Password(password),
-			},
-			HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-			Timeout:         time.Second * 2,
-		}
-		client, e = ssh.Dial("tcp", addr, cConfig)
-		if e != nil {
-			continue
-		} else {
-			break
+	for _, userPasswordsMap := range userPasswords {
+		for username, password := range userPasswordsMap {
+			fmt.Println(username, password)
+			cConfig := &ssh.ClientConfig{
+				User: username,
+				Auth: []ssh.AuthMethod{
+					ssh.Password(password),
+				},
+				HostKeyCallback: ssh.InsecureIgnoreHostKey(),
+				Timeout:         time.Second * 2,
+			}
+			client, e = ssh.Dial("tcp", addr, cConfig)
+			if e != nil {
+				continue
+			} else {
+				break
+			}
 		}
 	}
 
