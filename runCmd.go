@@ -267,7 +267,7 @@ func connect(str string) (client *ssh.Client, e error) {
 		}
 
 	} else {
-		e = errors.New(cfg.AuthMethod + " is error")
+		e = errors.New("ssh auth method '" + cfg.AuthMethod + "' is error")
 	}
 	return
 }
