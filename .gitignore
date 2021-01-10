@@ -17,3 +17,4 @@ local_deploy.sh
 grun
 *.log
 build.sh
+*.cfg
