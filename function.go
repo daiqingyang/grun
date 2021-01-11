@@ -79,24 +79,39 @@ func ParseConfigFile(cfgFile string) {
 			os.Exit(2)
 		}
 	} else {
-		defaultConfig := `logpath="g.log"
+		defaultConfig := `logpath="go.log"
 debug=false
+#并发数
 forks=300
-cache=true
 sshPort=22
+#是否默认sudo到root
 become=false
+#拷贝文件到目标机器时，是否备份老文件
 backOnCopy=true
+#ssh验证方法，默认是smart模式
 authMethod="smart"
 #authMethod="password"
 #authMethod="sshkey"
-[[privateKeys]]
-root="$HOME/.ssh/id_rsa"
-[[privateKeys]]
-otherUser="$HOME/.ssh/id_rsa2"
+#定义私钥文件，可以添加多条，轮询模式
+#[[privateKeys]]
+#root="$HOME/.ssh/id_rsa"
+#[[privateKeys]]
+#otherUser="$HOME/.ssh/id_rsa2"
+#定义ssh用户名、密码，可以添加多条，轮询模式
 [[userPasswords]]
 root="123456"
 [[userPasswords]]
 oatherUser="654321"
+#定义命令别名
+[alias]
+ll="ls -l"
+top="top -b -n1"
+free="free -m"
+ps="ps aux"
+df="df -h"
+curl="curl -s"
+ping="ping -W1 -c2"
+net="netstat -tlnp"
 
 `
 		home := "."

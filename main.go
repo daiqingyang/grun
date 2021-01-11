@@ -52,6 +52,7 @@ type config struct {
 	PrivateKeys   []map[string]string
 	AuthMethod    string
 	TimeOut       time.Duration
+	Alias         map[string]string
 }
 
 func init() {

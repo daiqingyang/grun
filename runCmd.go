@@ -20,6 +20,7 @@ import (
 func parseAndRun(cmd string) {
 	var e error
 	cmd, e = getSafeCmd(cmd)
+	cmd = decodeAliasCmd(cmd)
 	if e != nil {
 		logger.Print(e)
 		return
@@ -56,6 +57,7 @@ func parseAndRun(cmd string) {
 	wg.Wait()
 }
 
+//getSafeCmd 处理一些简单的危险命令
 func getSafeCmd(cmd string) (newCmd string, err error) {
 	err = nil
 	newCmd = strings.Trim(cmd, " \n\t")
@@ -74,6 +76,32 @@ func getSafeCmd(cmd string) (newCmd string, err error) {
 	}
 	return
 }
+
+//decodeAliasCmd 处理、转换命令别名，别名在cfg中定义
+func decodeAliasCmd(cmd string) (newCmd string) {
+	cmdSlice := strings.Fields(cmd)
+	cmdPosition0 := cmdSlice[0]
+	var newCmdSlice []string
+	var cmdPositionOther []string
+	if len(cmdSlice) > 1 {
+		cmdPositionOther = cmdSlice[1:]
+	}
+	for k, v := range cfg.Alias {
+		if cmdPosition0 == k {
+			cmdPosition0 = v
+			break
+		}
+	}
+	newCmdSlice = append(newCmdSlice, cmdPosition0)
+	for _, other := range cmdPositionOther {
+		newCmdSlice = append(newCmdSlice, other)
+	}
+	newCmd = strings.Join(newCmdSlice, " ")
+	return
+}
+
+//copyAndRun 把文件拷贝到远端，并执行
+//默认是拷贝到家目录下，以隐藏文件名定义
 func copyAndRun(ip string, cmd string) {
 	defer func() {
 		wg.Done()
