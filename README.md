@@ -85,3 +85,6 @@ EOF
 当前目录  
 家目录  
 /etc/  
+### 编译 
+go build -o grun *.go  
+sudo ln -sf `pwd`/grun /usr/bin/grun 
