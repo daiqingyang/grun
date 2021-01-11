@@ -1,6 +1,6 @@
 # grun
-go 版本的ssh并发执行命令  
-  feature:  
+## go 版本的ssh并发执行命令  
+###  feature:  
   1、支持ssh key验证和用户名、密码验证  
   2、支持管道和here document传递ip列表  
   3、支持定义常用命令别名  
@@ -35,7 +35,7 @@ EOF
 10.10.10.1,10.10.10.2,10.10.10.3,10.10.10.4,10.10.10.5  
 EOF  
 
-常用参数  
+### 常用参数  
   -b    if run cmd as root      
         #类似ansible -b,提权到root运行  
 
@@ -81,7 +81,7 @@ EOF
 
   -v    open debug mode  
 
-cfg配置文件寻找顺序如下，找到第一个后停止    
+### cfg配置文件寻找顺序如下，找到第一个后停止    
 当前目录  
 家目录  
 /etc/  
