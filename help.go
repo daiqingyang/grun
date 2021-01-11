@@ -24,8 +24,8 @@ func getCmdLineArg() {
 	remoteRun := flag.Bool("r", false, "copy script file to remote and run")
 	noNewline := flag.Bool("n", false, "print result without new line between ip and result")
 	copy := flag.Bool("c", false, "only copy local file to remote machine's some directory[can config]")
-	server = flag.Bool("server", false, "open server mode")
-	client = flag.Bool("client", false, "open client mod")
+	server = flag.Bool("server", false, "open server mode [not supported now]")
+	client = flag.Bool("client", false, "open client mod [not supported now]")
 	flag.Parse()
 	other := flag.Args()
 	timeOutInt := *timeOut
