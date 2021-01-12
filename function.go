@@ -102,12 +102,13 @@ authMethod="smart"
 root="123456"
 [[userPasswords]]
 oatherUser="654321"
-#定义命令别名，以左边开头的命令都会转换
+#定义命令别名，
+#开头匹配
 [alias]
 ll="ls -l"
 curl="curl -s"
 ping="ping -W1 -c2"
-#完全匹配才转换
+#完全匹配
 [shortcuts]
 top="top -b -n1"
 free="free -m"
