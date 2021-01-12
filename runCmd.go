@@ -103,7 +103,7 @@ func decodeAliasCmd(cmd string) (newCmd string) {
 
 //decodeShortCuts  只有输入的命令完全跟定义的快捷命令一样时，才转换
 func decodeShortCuts(cmd string) (newCmd string) {
-	newcmd = cmd
+	newCmd = cmd
 	if cmd != "" {
 		for k, v := range cfg.ShortCuts {
 			if cmd == k {
