@@ -77,8 +77,9 @@ EOF
         #本地编写的脚本，用上-r参数后，先分发到目标机器，然后再目标机器执行  
         #例如：当前目录有个脚本文件，可以直接按如下方式执行  
         #echo "10.10.10.1 10.10.10.2 10.10.10.3 10.10.10.4 10.10.10.5"|.grun -b -r sys_init.sh  
+          
   -t    set ssh connect time out, unit is second (default 2)  
-
+    
   -v    open debug mode  
 
 ### cfg配置文件寻找顺序如下，找到第一个后停止    

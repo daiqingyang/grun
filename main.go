@@ -53,6 +53,7 @@ type config struct {
 	AuthMethod    string
 	TimeOut       time.Duration
 	Alias         map[string]string
+	ShortCuts     map[string]string
 }
 
 func init() {

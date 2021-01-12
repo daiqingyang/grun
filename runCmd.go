@@ -20,6 +20,7 @@ import (
 func parseAndRun(cmd string) {
 	var e error
 	cmd, e = getSafeCmd(cmd)
+	cmd = decodeShortCuts(cmd)
 	cmd = decodeAliasCmd(cmd)
 	if e != nil {
 		logger.Print(e)
@@ -97,6 +98,20 @@ func decodeAliasCmd(cmd string) (newCmd string) {
 		newCmdSlice = append(newCmdSlice, other)
 	}
 	newCmd = strings.Join(newCmdSlice, " ")
+	return
+}
+
+//decodeShortCuts  只有输入的命令完全跟定义的快捷命令一样时，才转换
+func decodeShortCuts(cmd string) (newCmd string) {
+	newcmd = cmd
+	if cmd != "" {
+		for k, v := range cfg.ShortCuts {
+			if cmd == k {
+				newCmd = v
+				break
+			}
+		}
+	}
 	return
 }
 

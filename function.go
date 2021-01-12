@@ -102,17 +102,18 @@ authMethod="smart"
 root="123456"
 [[userPasswords]]
 oatherUser="654321"
-#定义命令别名
+#定义命令别名，以左边开头的命令都会转换
 [alias]
 ll="ls -l"
+curl="curl -s"
+ping="ping -W1 -c2"
+#完全匹配才转换
+[shortcuts]
 top="top -b -n1"
 free="free -m"
 ps="ps aux"
 df="df -h"
-curl="curl -s"
-ping="ping -W1 -c2"
 net="netstat -tlnp"
-
 `
 		home := "."
 		if u, e := user.Current(); e != nil {
