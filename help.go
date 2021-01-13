@@ -26,8 +26,8 @@ func getCmdLineArg() {
 	copy := flag.Bool("c", false, "only copy local file to remote machine's some directory[can config]")
 	server = flag.Bool("server", false, "open server mode [not supported now]")
 	client = flag.Bool("client", false, "open client mod [not supported now]")
-	cronAdd := flag.Bool("cronadd", false, "add crontab to running user ")
-	cronDel := flag.Bool("crondel", false, "del crontab in running user ")
+	cronAdd := flag.Bool("cronadd", false, "add crontab job in current user ")
+	cronDel := flag.Bool("crondel", false, "del crontab job in current user ")
 
 	annotation := flag.String("a", "", "annotate the crontab task,useful with -cronadd")
 	flag.Parse()
