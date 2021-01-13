@@ -19,3 +19,4 @@ grun
 build.sh
 *.cfg
 *.swp
+.crontab*

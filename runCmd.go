@@ -26,6 +26,10 @@ func parseAndRun(cmd string) {
 		logger.Print(e)
 		return
 	}
+	if e := preProcess(); e != nil {
+		logger.Println(e)
+		return
+	}
 	concurrent = make(chan int, cfg.Forks)
 	brd := bufio.NewReader(os.Stdin)
 	for {
@@ -47,6 +51,8 @@ func parseAndRun(cmd string) {
 					go copyAndRun(ip, cmd)
 				} else if cfg.Copy {
 					go copyOnly(ip, cmd)
+				} else if cfg.CronAdd {
+					go addCrontab(ip)
 				} else {
 					go run(ip, cmd)
 				}
@@ -56,6 +62,23 @@ func parseAndRun(cmd string) {
 		}
 	}
 	wg.Wait()
+}
+
+//做一些预处理操作
+func preProcess() (e error) {
+	if cmd != "" {
+		if cfg.CronAdd {
+			if e = crontabFormatCheck(cmd); e != nil {
+				return
+			}
+			var f string
+			if f, e = makeCronTmpFile(cmd); e != nil {
+				return
+			}
+			rt.cronTmpFile = f
+		}
+	}
+	return
 }
 
 //getSafeCmd 处理一些简单的危险命令
@@ -117,7 +140,7 @@ func decodeShortCuts(cmd string) (newCmd string) {
 
 //copyAndRun 把文件拷贝到远端，并执行
 //默认是拷贝到家目录下，以隐藏文件名定义
-func copyAndRun(ip string, cmd string) {
+func copyAndRun(ip string, localFile string) {
 	defer func() {
 		wg.Done()
 		<-concurrent
@@ -135,11 +158,11 @@ func copyAndRun(ip string, cmd string) {
 	defer client.Close()
 
 	t := time.Now().Unix()
-	fName := path.Base(cmd)
+	fName := path.Base(localFile)
 	destFile := "." + strconv.Itoa(int(t)) + "." + fName
 	fullCmd := "./" + destFile + ";rm " + destFile
 
-	if _, e := scp(client, cmd, destFile, direct); e != nil {
+	if _, e := scp(client, localFile, destFile, direct); e != nil {
 		return
 	}
 

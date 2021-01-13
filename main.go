@@ -25,6 +25,7 @@ var (
 		AuthMethod: "smart",
 		TimeOut:    time.Second * 2,
 	}
+	rt         runtimeConfig = runtimeConfig{}
 	cmd        string
 	wg         sync.WaitGroup
 	concurrent chan int
@@ -36,24 +37,29 @@ var (
 )
 
 type config struct {
-	LogPath       string
-	Debug         bool
-	Forks         int
-	AddNewline    bool
-	RemoteRun     bool
-	Copy          bool
-	UserPasswords []map[string]string
-	Cache         bool
-	CacheFile     string
-	Sshport       int
-	Become        bool
-	ColorPrint    bool
-	BackOnCopy    bool
-	PrivateKeys   []map[string]string
-	AuthMethod    string
-	TimeOut       time.Duration
-	Alias         map[string]string
-	ShortCuts     map[string]string
+	LogPath        string
+	Debug          bool
+	Forks          int
+	AddNewline     bool
+	RemoteRun      bool
+	Copy           bool
+	UserPasswords  []map[string]string
+	Cache          bool
+	CacheFile      string
+	Sshport        int
+	Become         bool
+	ColorPrint     bool
+	BackOnCopy     bool
+	PrivateKeys    []map[string]string
+	AuthMethod     string
+	TimeOut        time.Duration
+	Alias          map[string]string
+	ShortCuts      map[string]string
+	CronAdd        bool
+	CronAnnotation string
+}
+type runtimeConfig struct {
+	cronTmpFile string
 }
 
 func init() {
@@ -64,6 +70,7 @@ func init() {
 }
 
 func main() {
+
 	// index := readCache("b.a.a.a")
 	// fmt.Println(index)
 	// writeCache("b.a.a.a", 20000)
