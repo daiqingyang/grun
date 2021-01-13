@@ -53,6 +53,8 @@ func parseAndRun(cmd string) {
 					go copyOnly(ip, cmd)
 				} else if cfg.CronAdd {
 					go addCrontab(ip)
+				} else if cfg.CronDel {
+					go delCrontab(ip)
 				} else {
 					go run(ip, cmd)
 				}
@@ -72,7 +74,16 @@ func preProcess() (e error) {
 				return
 			}
 			var f string
-			if f, e = makeCronTmpFile(cmd); e != nil {
+			if f, e = makeCronAddTmpFile(cmd); e != nil {
+				return
+			}
+			rt.cronTmpFile = f
+		} else if cfg.CronDel {
+			if e = crontabFormatCheck(cmd); e != nil {
+				return
+			}
+			var f string
+			if f, e = makeCronDelTmpFile(cmd); e != nil {
 				return
 			}
 			rt.cronTmpFile = f

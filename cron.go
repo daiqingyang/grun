@@ -14,6 +14,12 @@ func addCrontab(ip string) {
 	}
 }
 
+func delCrontab(ip string) {
+	if cmd != "" {
+		copyAndRun(ip, rt.cronTmpFile)
+	}
+}
+
 //对crontab定义的时间格式进行粗略的检测
 func crontabFormatCheck(cmd string) (e error) {
 	var b bool
@@ -45,11 +51,12 @@ func crontabFormatCheck(cmd string) (e error) {
 	}
 	return
 }
-func makeCronTmpFile(cmd string) (file string, e error) {
+func makeCronAddTmpFile(cmd string) (file string, e error) {
 	var f *os.File
 	var content string
 	var annotation string
 	var debug string
+	var tail string
 	annotation = setAnnotation(cfg.CronAnnotation)
 	n := time.Now()
 	suffix := n.Format("20060102150405")
@@ -61,17 +68,20 @@ func makeCronTmpFile(cmd string) (file string, e error) {
 	defer f.Close()
 	if cfg.Debug {
 		debug = "set -x"
+		tail = "crontab -l"
+
 	} else {
 		debug = ""
+		tail = ""
 	}
 	content = fmt.Sprintf(`#!/bin/bash
 %s
 user=$(id -u -n)
 suffix=$(date +%%Y%%m%%d%%H%%M%%S)
 pre="$(crontab -l 2>/dev/null)"
-echo $pre > .cronbak.$suffix
+echo "$pre" > .cronbak.$suffix
 
-rst=$(echo $pre|fgrep "%s")
+rst=$(echo "$pre"|fgrep "%s"|head -n1)
 #是否完全匹配
 if [ "X$rst" != "X%s" ];then
   crontab - <<EOF
@@ -79,9 +89,74 @@ $pre
 %s
 %s
 EOF
-
 fi
-`, debug, cmd, cmd, annotation, cmd)
+
+%s
+`, debug, cmd, cmd, annotation, cmd, tail)
+	if _, e = f.WriteString(content); e != nil {
+		return
+	}
+	return
+}
+
+func makeCronDelTmpFile(cmd string) (file string, e error) {
+	var f *os.File
+	var content string
+	var debug string
+	var tail string
+	n := time.Now()
+	suffix := n.Format("20060102150405")
+	file = ".crontab." + suffix
+
+	if f, e = os.OpenFile(file, os.O_CREATE|os.O_RDWR, 0755); e != nil {
+		return
+	}
+	defer f.Close()
+	if cfg.Debug {
+		debug = "set -x"
+		tail = "crontab -l"
+	} else {
+		debug = ""
+		tail = ""
+	}
+	content = fmt.Sprintf(`#!/bin/bash
+%s
+#备份crontab -l
+suffix=$(date +%%Y%%m%%d%%H%%M%%S)
+prelist="$(crontab -l 2>/dev/null)"
+echo ""
+echo "$prelist" > .cronbak.$suffix
+
+rmline="%s"
+pre=""
+newText=""
+#循环拿当前行和上一行
+while read line;do
+  pre="${current}"
+  current="$line"
+  if [ "x$current" = "x$rmline" ] ;then
+    if [[ "${pre}" =~ ^"#Grun create:" ]];then
+      pre=""
+    fi
+    current=""
+  fi
+
+  if [ "${pre}" != "" ];then
+    newText="${newText}""${pre}\n"
+  fi
+
+done <<<"$prelist"
+#循环后把最后一行再追加上
+if [ "${current}" != "" ];then
+  newText="${newText}""${current}\n"
+fi
+#重新导入crontab
+echo -ne "$newText" |crontab -
+%s
+`, debug, cmd, tail)
+	if cfg.Debug {
+		fmt.Println("tmp file:", file)
+	}
 	if _, e = f.WriteString(content); e != nil {
 		return
 	}

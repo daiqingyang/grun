@@ -56,6 +56,7 @@ type config struct {
 	Alias          map[string]string
 	ShortCuts      map[string]string
 	CronAdd        bool
+	CronDel        bool
 	CronAnnotation string
 }
 type runtimeConfig struct {
