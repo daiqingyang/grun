@@ -82,6 +82,11 @@ EOF
     
   -v    open debug mode  
 
+  -cronadd  
+        add crontab job in current user   
+  -crondel  
+        del crontab job in current user   
+
 ### cfg配置文件寻找顺序如下，找到第一个后停止    
 当前目录  
 家目录  
