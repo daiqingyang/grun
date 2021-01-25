@@ -28,14 +28,16 @@ func getCmdLineArg() {
 	client = flag.Bool("client", false, "open client mod [not supported now]")
 	cronAdd := flag.Bool("cronadd", false, "add crontab job in current user ")
 	cronDel := flag.Bool("crondel", false, "del crontab job in current user ")
-
 	annotation := flag.String("a", "", "annotate the crontab task,useful with -cronadd")
+	adminWeb := flag.Bool("admin", false, "open http admin web ")
+
 	flag.Parse()
 	other := flag.Args()
 	timeOutInt := *timeOut
 	if len(other) != 0 {
 		cmd = other[0]
 	}
+	cfg.AdminWeb = *adminWeb
 	cfg.CronAdd = *cronAdd
 	cfg.CronDel = *cronDel
 	cfg.CronAnnotation = *annotation

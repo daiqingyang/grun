@@ -58,6 +58,7 @@ type config struct {
 	CronAdd        bool
 	CronDel        bool
 	CronAnnotation string
+	AdminWeb       bool
 }
 type runtimeConfig struct {
 	cronTmpFile string
@@ -79,9 +80,10 @@ func main() {
 	if cmd != "" {
 		parseAndRun(cmd)
 
+	} else if cfg.AdminWeb {
+		runAdminWeb()
 	}
 
-	// copyAndRun("10.58.165.165", "hostname")
 }
 func runServer() {
 	r := gin.Default()
