@@ -24,7 +24,7 @@ var (
 		BackOnCopy: true,
 		AuthMethod: "smart",
 		TimeOut:    time.Second * 2,
-		Version:    "0.1",
+		Version:    "0.2",
 	}
 	rt         runtimeConfig = runtimeConfig{}
 	cmd        string

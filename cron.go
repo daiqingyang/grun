@@ -34,6 +34,7 @@ func crontabFormatCheck(cmd string) (e error) {
 		e = errors.New("fileds is not enough")
 		return
 	}
+	//前5位应当是expectedFormatedString中定义的字符
 	for _, i := range stringSlice[:5] {
 		sequence := strings.Split(i, "")
 		for _, s := range sequence {
@@ -47,6 +48,25 @@ func crontabFormatCheck(cmd string) (e error) {
 				e = errors.New(s + " is not expected string in " + cmd)
 				return
 			}
+		}
+	}
+	//禁止命令是rm -rf /,rm -rf /*，rm /,rm /*
+	if stringSlice[5] == "rm" {
+		if stringSlice[6] == "-rf" && stringSlice[7] == "/" {
+			e = errors.New(stringSlice[5] + " " + stringSlice[6] + " " + stringSlice[7] + " is not allow in crontab")
+			return
+		}
+		if stringSlice[6] == "-rf" && stringSlice[7] == "/*" {
+			e = errors.New(stringSlice[5] + " " + stringSlice[6] + " " + stringSlice[7] + " is not allow in crontab")
+			return
+		}
+		if stringSlice[6] == "/" {
+			e = errors.New(stringSlice[5] + " " + stringSlice[6] + " is not allow in crontab")
+			return
+		}
+		if stringSlice[6] == "/*" {
+			e = errors.New(stringSlice[5] + " " + stringSlice[6] + " is not allow in crontab")
+			return
 		}
 	}
 	return
@@ -80,15 +100,17 @@ user=$(id -u -n)
 suffix=$(date +%%Y%%m%%d%%H%%M%%S)
 pre="$(crontab -l 2>/dev/null)"
 echo "$pre" > .cronbak.$suffix
-
+#检测新增任务是否已经存在
 rst=$(echo "$pre"|fgrep "%s"|head -n1)
-#是否完全匹配
+#存在的任务是否完全匹配新增任务，只有完全匹配才不新增
 if [ "X$rst" != "X%s" ];then
   crontab - <<EOF
 $pre
 %s
 %s
 EOF
+else
+  echo "cron job  already exists!"
 fi
 
 %s

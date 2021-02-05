@@ -67,6 +67,7 @@ func parseAndRun(cmd string) {
 }
 
 //做一些预处理操作
+//生成cron 临时文件
 func preProcess() (e error) {
 	if cmd != "" {
 		if cfg.CronAdd {
