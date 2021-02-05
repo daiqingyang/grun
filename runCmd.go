@@ -19,9 +19,10 @@ import (
 //parseAndRun  解析命令行指令，并运行
 func parseAndRun(cmd string) {
 	var e error
-	cmd, e = getSafeCmd(cmd)
 	cmd = decodeShortCuts(cmd)
 	cmd = decodeAliasCmd(cmd)
+	cmd, e = getSafeCmd(cmd)
+
 	if e != nil {
 		logger.Print(e)
 		return
