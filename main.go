@@ -5,6 +5,8 @@ import (
 	"sync"
 	"time"
 
+	"grun/httpserver"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -81,7 +83,8 @@ func main() {
 		parseAndRun(cmd)
 
 	} else if cfg.AdminWeb {
-		runAdminWeb()
+		httpserver.RunAdminWeb()
+
 	}
 
 }
