@@ -93,6 +93,8 @@ func preProcess() (e error) {
 }
 
 //getSafeCmd 处理一些简单的危险命令
+//不允许rm /
+//不允许无参数的crontab，会清空cron列表
 func getSafeCmd(cmd string) (newCmd string, err error) {
 	err = nil
 	newCmd = strings.Trim(cmd, " \n\t")
@@ -108,6 +110,8 @@ func getSafeCmd(cmd string) (newCmd string, err error) {
 				return
 			}
 		}
+	} else if len(strSlice) == 1 && strSlice[0] == "crontab" {
+		err = errors.New("crontab need some args")
 	}
 	return
 }
