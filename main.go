@@ -6,8 +6,6 @@ import (
 	"time"
 
 	"grun/httpserver"
-
-	"github.com/gin-gonic/gin"
 )
 
 var (
@@ -26,6 +24,7 @@ var (
 		BackOnCopy: true,
 		AuthMethod: "smart",
 		TimeOut:    time.Second * 2,
+		Version:    "0.1",
 	}
 	rt         runtimeConfig = runtimeConfig{}
 	cmd        string
@@ -39,6 +38,7 @@ var (
 )
 
 type config struct {
+	Version        string
 	LogPath        string
 	Debug          bool
 	Forks          int
@@ -87,8 +87,4 @@ func main() {
 
 	}
 
-}
-func runServer() {
-	r := gin.Default()
-	r.Run(":10240")
 }

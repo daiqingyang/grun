@@ -23,6 +23,7 @@ func setLog() {
 }
 
 func RunAdminWeb() {
+	initDB()
 	htConfig := httpConfig{
 		port: "10240",
 	}

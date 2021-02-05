@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"time"
 )
 
@@ -16,6 +17,7 @@ func getCmdLineArg() {
 
 	forks := flag.Int("f", defaultForks, "set concurrent num")
 	debug := flag.Bool("v", false, "open debug mode")
+	version := flag.Bool("V", false, "show current version")
 	notColorPrint := flag.Bool("nc", false, "close color print")
 	notBackOnCopy := flag.Bool("nb", false, "close backup when copy")
 	authMethod := flag.String("m", "", "ssh connect auth method [password|sshkey|smart],default is smart")
@@ -43,6 +45,10 @@ func getCmdLineArg() {
 	cfg.CronAnnotation = *annotation
 	cfg.Forks = *forks
 	cfg.TimeOut = time.Second * time.Duration(timeOutInt)
+	if *version {
+		fmt.Println(cfg.Version)
+		os.Exit(0)
+	}
 	if *remoteRun != false {
 		cfg.RemoteRun = *remoteRun
 	}

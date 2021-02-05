@@ -21,3 +21,4 @@ build.sh
 *.swp
 .crontab*
 .vscode/*
+dist/*
