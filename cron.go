@@ -20,7 +20,7 @@ func delCrontab(ip string) {
 	}
 }
 
-//对crontab定义的时间格式进行粗略的检测
+//在添加crontab时，对crontab定义的时间格式和命令格式进行粗略的检测
 func crontabFormatCheck(cmd string) (e error) {
 	var b bool
 	expectedFormatedString := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
@@ -69,6 +69,46 @@ func crontabFormatCheck(cmd string) (e error) {
 			return
 		}
 	}
+	return
+
+}
+
+//在删除crontab的时候，对crontab定义的时间格式进行粗略的检测，不检测是否包含rm /
+func crontabFormatCheckForDel(cmd string) (e error) {
+	var b bool
+	expectedFormatedString := []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+		"11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23",
+		"24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36",
+		"37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
+		"50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "-", "*", "/", ","}
+	stringSlice := strings.Fields(cmd)
+	//分隔后，长度至少6位
+	if len(stringSlice) < 6 {
+		e = errors.New("fileds is not enough")
+		return
+	}
+	//前5位应当是expectedFormatedString中定义的字符
+	for _, i := range stringSlice[:5] {
+		sequence := strings.Split(i, "")
+		for _, s := range sequence {
+			b = false
+			for _, expected := range expectedFormatedString {
+				if s == expected {
+					b = true
+				}
+			}
+			if b == false {
+				e = errors.New(s + " is not expected string in " + cmd)
+				return
+			}
+		}
+	}
+	return
+
+}
+func convertCronCmd(cmd string) (newcmd string) {
+	cmdSlice := strings.Fields(cmd)
+	newcmd = strings.Join(cmdSlice, " ")
 	return
 }
 func makeCronAddTmpFile(cmd string) (file string, e error) {

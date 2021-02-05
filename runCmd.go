@@ -74,13 +74,14 @@ func preProcess() (e error) {
 			if e = crontabFormatCheck(cmd); e != nil {
 				return
 			}
+			cmd := convertCronCmd(cmd)
 			var f string
 			if f, e = makeCronAddTmpFile(cmd); e != nil {
 				return
 			}
 			rt.cronTmpFile = f
 		} else if cfg.CronDel {
-			if e = crontabFormatCheck(cmd); e != nil {
+			if e = crontabFormatCheckForDel(cmd); e != nil {
 				return
 			}
 			var f string
