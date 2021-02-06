@@ -167,6 +167,9 @@ func copyAndRun(ip string, localFile string) {
 			return
 		}
 	}()
+	localFileAndArgs := strings.Fields(localFile)
+	localFile = localFileAndArgs[0]
+	args := strings.Join(localFileAndArgs[1:], " ")
 	direct := true
 	client, e := connect(ip)
 	if e != nil {
@@ -178,9 +181,10 @@ func copyAndRun(ip string, localFile string) {
 	t := time.Now().Unix()
 	fName := path.Base(localFile)
 	destFile := "." + strconv.Itoa(int(t)) + "." + fName
-	fullCmd := "./" + destFile + ";rm " + destFile
+	fullCmd := "./" + destFile + " " + args + ";rm " + destFile
 
 	if _, e := scp(client, localFile, destFile, direct); e != nil {
+		logger.Println(e)
 		return
 	}
 
@@ -201,6 +205,9 @@ func copyAndRun(ip string, localFile string) {
 	if session, e = client.NewSession(); e != nil {
 		logger.Println("ssh create new session error:", e)
 		return
+	}
+	if cfg.Debug {
+		fmt.Println("fullcmd:", fullCmd)
 	}
 	out, e := session.CombinedOutput(fullCmd)
 	mixOut(ip, out)
@@ -392,6 +399,9 @@ func scp(client *ssh.Client, local string, dest string, direct bool) (out []byte
 		//如果是文件的话，剥离出父目录
 		names := strings.Split(dest, "/")
 		parentDir = strings.Join(names[:len(names)-1], "/")
+		if parentDir == "" {
+			parentDir = "./"
+		}
 	}
 	if cfg.Debug {
 		fmt.Println("parentDir", parentDir, "dst:", dest)
@@ -402,6 +412,9 @@ func scp(client *ssh.Client, local string, dest string, direct bool) (out []byte
 		if os.IsNotExist(e) {
 			e = newClient.MkdirAll(parentDir)
 			if e != nil {
+				if cfg.Debug {
+					logger.Println(e)
+				}
 				return
 			}
 
@@ -415,11 +428,14 @@ func scp(client *ssh.Client, local string, dest string, direct bool) (out []byte
 	finfo, e = newClient.Stat(dest)
 	if e != nil {
 		if !os.IsNotExist(e) {
+			logger.Println(e)
 			return
 		}
 	} else if !finfo.IsDir() {
 		if cfg.BackOnCopy {
-
+			if cfg.Debug {
+				fmt.Println("backup", dest)
+			}
 			suffix := time.Now().Format(".20060102150405")
 			backupFile := dest + suffix
 			session, e = client.NewSession()
