@@ -1,5 +1,5 @@
 # grun
-## go 版本的ssh并发执行命令  
+## 超快的ssh并发执行命令  
 ###  feature:  
   1、支持ssh key验证和用户名、密码验证  
   2、支持管道和here document传递ip列表  
@@ -93,4 +93,4 @@ EOF
 /etc/  
 ### 编译 
 go build -o grun *.go  
-sudo ln -sf `pwd`/grun /usr/bin/grun 
+``sudo ln -sf `pwd`/grun /usr/bin/grun ``
