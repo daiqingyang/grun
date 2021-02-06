@@ -16,6 +16,8 @@ func getCmdLineArg() {
 	}
 
 	forks := flag.Int("f", defaultForks, "set concurrent num")
+	interval := flag.Int("i", 0, "set wait interval after every batch running,maybe you will use it with -f,unit is second")
+
 	debug := flag.Bool("v", false, "open debug mode")
 	version := flag.Bool("V", false, "show current version")
 	notColorPrint := flag.Bool("nc", false, "close color print")
@@ -44,6 +46,7 @@ func getCmdLineArg() {
 	cfg.CronDel = *cronDel
 	cfg.CronAnnotation = *annotation
 	cfg.Forks = *forks
+	cfg.Interval = *interval
 	cfg.TimeOut = time.Second * time.Duration(timeOutInt)
 	if *version {
 		fmt.Println(cfg.Version)

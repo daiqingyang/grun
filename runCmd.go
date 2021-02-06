@@ -260,6 +260,8 @@ func copyOnly(ip string, cmd string) {
 
 func run(ip string, cmd string) {
 	defer func() {
+		timer := time.NewTimer(time.Second * time.Duration(cfg.Interval))
+		<-timer.C
 		wg.Done()
 		<-concurrent
 		if err := recover(); err != nil {
