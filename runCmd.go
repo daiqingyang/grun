@@ -244,7 +244,10 @@ func copyOnly(ip string, cmd string) {
 	if e != nil {
 		logger.Println(e)
 	}
-	out, _ := scp(c, srcFilePath, destFile, direct)
+	out, err := scp(c, srcFilePath, destFile, direct)
+	if err != nil {
+		out = append(out, []byte(err.Error())...)
+	}
 	mixOut(ip, out)
 }
 
@@ -364,6 +367,7 @@ func scp(client *ssh.Client, local string, dest string, direct bool) (out []byte
 	var session *ssh.Session
 	var destFile *sftp.File
 	var tmpFile string
+	var parentDir string
 	addr := client.Conn.RemoteAddr().String()
 	ip := strings.Split(addr, ":")[0]
 	newClient, e := sftp.NewClient(client)
@@ -379,21 +383,44 @@ func scp(client *ssh.Client, local string, dest string, direct bool) (out []byte
 	}
 	defer localFile.Close()
 	// fmt.Println(dest)
-	//判断目标文件是否是目录，以及如果是文件，是否要备份
-	if finfo, e = newClient.Stat(dest); e != nil {
+	//计算出父目录和文件完整路径
+	if strings.HasSuffix(dest, "/") {
+		parentDir = dest
+		srcName := path.Base(local)
+		dest = dest + srcName
+	} else {
+		//如果是文件的话，剥离出父目录
+		names := strings.Split(dest, "/")
+		parentDir = strings.Join(names[:len(names)-1], "/")
+	}
+	if cfg.Debug {
+		fmt.Println("parentDir", parentDir, "dst:", dest)
+	}
+	//保证父目录要存在
+	if _, e = newClient.Stat(parentDir); e != nil {
 
-		if !os.IsNotExist(e) {
+		if os.IsNotExist(e) {
+			e = newClient.MkdirAll(parentDir)
+			if e != nil {
+				return
+			}
+
+		} else {
 			logger.Print(e)
 			return
 		}
-	} else {
-		if finfo.IsDir() {
-			srcName := path.Base(local)
-			dest = dest + "/" + srcName
+	}
+	//如果目标文件存在并且开启备份配置，那就备份
+	//如果目录文件是目录，就报错，停止继续
+	finfo, e = newClient.Stat(dest)
+	if e != nil {
+		if !os.IsNotExist(e) {
+			return
 		}
-
+	} else if !finfo.IsDir() {
 		if cfg.BackOnCopy {
-			suffix := time.Now().Format("20060102150405")
+
+			suffix := time.Now().Format(".20060102150405")
 			backupFile := dest + suffix
 			session, e = client.NewSession()
 			if e != nil {
@@ -405,14 +432,20 @@ func scp(client *ssh.Client, local string, dest string, direct bool) (out []byte
 			} else {
 				backupCmd = "cp " + dest + " " + backupFile
 			}
+			if cfg.Debug {
+				fmt.Println("backupCmd:", backupCmd)
+			}
 			out, e = session.CombinedOutput(backupCmd)
 			if e != nil {
 				logger.Println(e)
 				return
 			}
 		}
-
+	} else {
+		e = errors.New("dest:" + dest + " exists and is directory\n")
+		return
 	}
+
 	if direct {
 		destFile, e = newClient.Create(dest)
 		if e != nil {
@@ -420,7 +453,6 @@ func scp(client *ssh.Client, local string, dest string, direct bool) (out []byte
 			return
 		}
 		defer destFile.Close()
-
 		_, e = io.Copy(destFile, localFile)
 		if e != nil {
 			logger.Println("io.Copy errr:", e)
