@@ -23,3 +23,4 @@ deploy.sh
 .crontab*
 .vscode/*
 dist/*
+workspace.code-workspace
