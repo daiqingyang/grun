@@ -42,6 +42,7 @@ type config struct {
 	LogPath        string
 	Debug          bool
 	Forks          int
+	Interval       int
 	AddNewline     bool
 	RemoteRun      bool
 	Copy           bool
