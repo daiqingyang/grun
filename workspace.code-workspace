@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "../front"
+			"path": "../agent"
 		}
 	]
 }
