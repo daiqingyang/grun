@@ -23,6 +23,7 @@ func setLog() {
 }
 
 func RunAdminWeb() {
+
 	initDB()
 	htConfig := httpConfig{
 		port: "10240",
@@ -52,11 +53,17 @@ func RunAdminWeb() {
 	eng.PUT("/group", groupUpdate)
 
 	eng.GET("/sync", syncTable)
+	eng.GET("/ping", ping)
 	eng.GET("/test", test)
 	eng.NoRoute(noRoute)
 
 	eng.Run(":" + htConfig.port)
 
+}
+func ping(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"msg": "pong",
+	})
 }
 func syncTable(c *gin.Context) {
 	config.openDebug()

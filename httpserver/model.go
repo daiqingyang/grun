@@ -1,6 +1,8 @@
 package httpserver
 
 import (
+	"fmt"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -54,7 +56,7 @@ func initDB() {
 		dsn: "root:daidai141@tcp(127.0.0.1:3306)/goweb?charset=utf8&parseTime=true&loc=Local",
 	}
 	if e := config.conncetDB(); e != nil {
-		panic(e)
+		fmt.Println(e)
 	}
 }
 func (config *DBConfig) openDebug() {
