@@ -3,6 +3,7 @@ package httpserver
 import (
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/contrib/sessions"
@@ -28,35 +29,39 @@ func RunAdminWeb() {
 		port: "10240",
 	}
 	setLog()
-	eng := gin.Default()
-	eng.Use(CORS())
-	//session midddleware
-	store := sessions.NewCookieStore([]byte("iam_gin"))
-	store.Options(sessions.Options{
-		MaxAge: 60 * 60 * 24 * 30,
-	})
-	eng.Use(sessions.Sessions("mySessions", store))
+	eng := gin.New()
+	eng.Use(gin.Recovery(), MyFormatterLog(), CORS(), MySession())
+	rootGroup := eng.Group("/")
+	{
+		rootGroup.GET("/", root)
+		rootGroup.GET("/ping", ping)
+		rootGroup.GET("/test", test)
+		rootGroup.StaticFS("/static", http.Dir("static"))
+	}
+	//need login auth route group
+	auth := eng.Group("/p")
+	{
+		auth.POST("/login", login)
+		auth.GET("/logout", logout)
+		auth.GET("/user", userList)
+		auth.POST("/user", userAdd)
+		auth.DELETE("/user", userDel)
+		auth.PUT("/user", userUpdate)
+		auth.GET("/group", groupList)
+		auth.POST("/group", groupAdd)
+		auth.DELETE("/group", groupDel)
+		auth.PUT("/group", groupUpdate)
+		auth.GET("/sync", syncTable)
+	}
 
-	eng.Static("/static", "static")
-	eng.LoadHTMLGlob("templates/*")
-	eng.GET("/", root)
-	eng.POST("/login", login)
-	eng.GET("/logout", logout)
-	eng.GET("/user", userList)
-	eng.POST("/user", userAdd)
-	eng.DELETE("/user", userDel)
-	eng.PUT("/user", userUpdate)
-	eng.GET("/group", groupList)
-	eng.POST("/group", groupAdd)
-	eng.DELETE("/group", groupDel)
-	eng.PUT("/group", groupUpdate)
-
-	eng.GET("/sync", syncTable)
-	eng.GET("/test", test)
 	eng.NoRoute(noRoute)
-
 	eng.Run(":" + htConfig.port)
 
+}
+func ping(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"msg": "pong",
+	})
 }
 func syncTable(c *gin.Context) {
 	config.openDebug()
@@ -140,20 +145,4 @@ func noRoute(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status": "404",
 	})
-}
-
-func CORS() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-
-		c.Next()
-	}
 }
