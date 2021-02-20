@@ -24,14 +24,14 @@ func setLog() {
 }
 
 func RunAdminWeb() {
-
 	initDB()
 	htConfig := httpConfig{
 		port: "10240",
 	}
 	setLog()
-	eng := gin.Default()
-	rootGroup := eng.Group("/", CORS(), MySession())
+	eng := gin.New()
+	eng.Use(gin.Recovery(), MyFormatterLog(), CORS(), MySession())
+	rootGroup := eng.Group("/")
 	{
 		rootGroup.GET("/", root)
 		rootGroup.GET("/ping", ping)
@@ -39,7 +39,7 @@ func RunAdminWeb() {
 		rootGroup.StaticFS("/static", http.Dir("static"))
 	}
 	//need login auth route group
-	auth := eng.Group("/p", CORS(), MySession())
+	auth := eng.Group("/p")
 	{
 		auth.POST("/login", login)
 		auth.GET("/logout", logout)
@@ -145,29 +145,4 @@ func noRoute(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status": "404",
 	})
-}
-
-func CORS() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-
-		c.Next()
-	}
-}
-
-//session midddleware
-func MySession() gin.HandlerFunc {
-	store := sessions.NewCookieStore([]byte("iam_gin"))
-	store.Options(sessions.Options{
-		MaxAge: 60 * 60 * 24 * 30,
-	})
-	return sessions.Sessions("mySessions", store)
 }
