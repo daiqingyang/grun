@@ -2,9 +2,7 @@ package httpserver
 
 import (
 	"fmt"
-	"io"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -14,23 +12,13 @@ type httpConfig struct {
 	port string
 }
 
-func setLog() {
-	logFile, e := os.OpenFile("gin.log", os.O_RDWR|os.O_APPEND|os.O_CREATE, 0644)
-	if e != nil {
-		fmt.Println(e)
-	}
-	gin.DefaultWriter = io.MultiWriter(os.Stdout, logFile)
-	gin.DefaultErrorWriter = io.MultiWriter(os.Stdout, logFile)
-}
-
 func RunAdminWeb() {
 	initDB()
 	htConfig := httpConfig{
 		port: "10240",
 	}
-	setLog()
 	eng := gin.New()
-	eng.Use(gin.Recovery(), MyFormatterLog(), CORS(), MySession())
+	eng.Use(gin.Recovery(), MyLog(), CORS(), MySession())
 	rootGroup := eng.Group("/")
 	{
 		rootGroup.GET("/", root)
