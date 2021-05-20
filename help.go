@@ -16,6 +16,8 @@ func getCmdLineArg() {
 	}
 
 	forks := flag.Int("f", defaultForks, "set concurrent num")
+	destIPList := flag.String("d", "", "set target iplist file")
+
 	interval := flag.Int("i", 0, "set wait interval after every batch running,maybe you will use it with -f,unit is second")
 
 	debug := flag.Bool("v", false, "open debug mode")
@@ -41,6 +43,7 @@ func getCmdLineArg() {
 	if len(other) != 0 {
 		cmd = other[0]
 	}
+	cfg.DestIPList = *destIPList
 	cfg.AdminWeb = *adminWeb
 	cfg.CronAdd = *cronAdd
 	cfg.CronDel = *cronDel
