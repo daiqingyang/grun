@@ -24,7 +24,8 @@ var (
 		BackOnCopy: true,
 		AuthMethod: "smart",
 		TimeOut:    time.Second * 2,
-		Version:    "0.2",
+		Version:    "0.3",
+		DestIPList: "",
 	}
 	rt         runtimeConfig = runtimeConfig{}
 	cmd        string
@@ -62,6 +63,7 @@ type config struct {
 	CronDel        bool
 	CronAnnotation string
 	AdminWeb       bool
+	DestIPList     string
 }
 type runtimeConfig struct {
 	cronTmpFile string

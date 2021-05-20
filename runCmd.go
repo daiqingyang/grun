@@ -19,6 +19,7 @@ import (
 //parseAndRun  解析命令行指令，并运行
 func parseAndRun(cmd string) {
 	var e error
+	var f *os.File
 	cmd = decodeShortCuts(cmd)
 	cmd = decodeAliasCmd(cmd)
 	cmd, e = getSafeCmd(cmd)
@@ -32,7 +33,15 @@ func parseAndRun(cmd string) {
 		return
 	}
 	concurrent = make(chan int, cfg.Forks)
-	brd := bufio.NewReader(os.Stdin)
+	if cfg.DestIPList != "" {
+		f, e = os.OpenFile(cfg.DestIPList, os.O_RDONLY, 0644)
+		if e != nil {
+			logger.Fatalf("open %s  error: %s", cfg.DestIPList, e)
+		}
+	} else {
+		f = os.Stdin
+	}
+	brd := bufio.NewReader(f)
 	for {
 		str, e := brd.ReadString('\n')
 		if e != nil {
